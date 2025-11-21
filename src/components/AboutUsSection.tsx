@@ -10,6 +10,8 @@
  * - Text content below logo (centered)
  */
 
+import Image from 'next/image'
+
 interface AboutUsSectionProps {
   logo: string;
   label: string;
@@ -30,9 +32,11 @@ export default function AboutUsSection({
         <div className="hidden md:grid md:grid-cols-2 gap-12 items-center">
           {/* Logo on Left */}
           <div className="flex justify-center">
-            <img
+            <Image
               src={logo}
               alt="About Us Logo"
+              width={320}
+              height={320}
               className="h-80 w-auto object-contain"
             />
           </div>
@@ -57,9 +61,11 @@ export default function AboutUsSection({
         <div className="md:hidden space-y-8">
           {/* Logo on Top */}
           <div className="flex justify-center">
-            <img
+            <Image
               src={logo}
               alt="About Us Logo"
+              width={192}
+              height={192}
               className="h-48 w-auto object-contain"
             />
           </div>

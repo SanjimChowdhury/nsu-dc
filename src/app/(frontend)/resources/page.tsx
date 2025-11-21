@@ -39,8 +39,8 @@ export default function ComingSoonPage() {
                 Something great is on the way.
               </h1>
               <p className="text-lg text-gray-600 mb-8">
-                We're putting the final touches on this page. Check back soon—or drop your email
-                and we'll ping you.
+                We&apos;re putting the final touches on this page. Check back soon—or drop your email
+                and we&apos;ll ping you.
               </p>
 
               {/* Countdown Timer */}

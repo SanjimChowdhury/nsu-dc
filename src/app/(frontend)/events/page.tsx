@@ -1,5 +1,6 @@
 import React from 'react'
 import PageHeader from '@/components/PageHeader'
+import type { Event } from '@/types/navigation'
 
 /**
  * Events Page
@@ -9,7 +10,7 @@ import PageHeader from '@/components/PageHeader'
  */
 export default function EventsPage() {
   // Future: Fetch events from Payload CMS or API
-  const events: any[] = []
+  const events: Event[] = []
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -26,7 +27,7 @@ export default function EventsPage() {
               <div className="text-6xl mb-4">📅</div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">No Events Right Now</h3>
               <p className="text-gray-600">
-                We're planning exciting events and tournaments. Check back soon for updates, or
+                We&apos;re planning exciting events and tournaments. Check back soon for updates, or
                 follow us on social media to stay informed!
               </p>
               <div className="mt-6 flex gap-4 justify-center">
