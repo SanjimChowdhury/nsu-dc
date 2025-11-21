@@ -37,7 +37,7 @@ interface HeroProps {
 
 export default function Hero({ slides }: HeroProps) {
   // Initialize autoplay plugin for carousel
-  const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true }))
+  const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }))
 
   return (
     <section className="w-full">

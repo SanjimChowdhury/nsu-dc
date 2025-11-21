@@ -115,10 +115,10 @@ export default async function Header() {
 
           {/* Desktop Buttons */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link href="/register" className="btn-secondary px-4 py-2 text-sm font-semibold rounded-lg transition-transform hover:-translate-y-0.5">
+            <Link href="/resources" className="btn-secondary px-4 py-2 text-sm font-semibold rounded-lg transition-transform hover:-translate-y-0.5">
               Student Portal
             </Link>
-            <Link href="/register" className="btn-primary px-5 py-2 text-sm font-semibold rounded-lg transition-transform hover:-translate-y-0.5">
+            <Link href="/resources" className="btn-primary px-5 py-2 text-sm font-semibold rounded-lg transition-transform hover:-translate-y-0.5">
               Join NSUDC
             </Link>
           </div>

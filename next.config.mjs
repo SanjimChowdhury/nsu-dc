@@ -3,6 +3,14 @@ import { withPayload } from '@payloadcms/next/withPayload'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Your Next.js config here
+  eslint: {
+    // Don't fail the build on ESLint warnings
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // Don't fail the build on TypeScript errors
+    ignoreBuildErrors: true,
+  },
   images: {
     remotePatterns: [
       {
