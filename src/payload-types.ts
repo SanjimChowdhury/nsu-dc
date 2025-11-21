@@ -92,11 +92,13 @@ export interface Config {
     header: Header;
     home: Home;
     'about-us': AboutUs;
+    footer: Footer;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
     'about-us': AboutUsSelect<false> | AboutUsSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
   };
   locale: null;
   user: User & {
@@ -382,6 +384,17 @@ export interface Header {
       | null;
     id?: string | null;
   }[];
+  topBar?: {
+    email?: string | null;
+    hours?: string | null;
+    socialLinks?:
+      | {
+          platform?: ('facebook' | 'instagram' | 'twitter' | 'linkedin') | null;
+          url: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -436,6 +449,32 @@ export interface AboutUs {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: string;
+  /**
+   * Logo image for the footer
+   */
+  logo: string | Media;
+  /**
+   * Text to display below the logo
+   */
+  description?: string | null;
+  connectLinks?:
+    | {
+        label: string;
+        url: string;
+        newTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  address?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -454,6 +493,19 @@ export interface HeaderSelect<T extends boolean = true> {
               id?: T;
             };
         id?: T;
+      };
+  topBar?:
+    | T
+    | {
+        email?: T;
+        hours?: T;
+        socialLinks?:
+          | T
+          | {
+              platform?: T;
+              url?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -485,6 +537,26 @@ export interface AboutUsSelect<T extends boolean = true> {
   label?: T;
   heading?: T;
   description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  logo?: T;
+  description?: T;
+  connectLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        newTab?: T;
+        id?: T;
+      };
+  address?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

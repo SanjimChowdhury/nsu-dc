@@ -1,6 +1,5 @@
 import { getPayload } from 'payload'
 import config from '@/payload.config'
-import Header from '@/components/Header'
 import Hero from '@/components/Hero'
 import AboutUsSection from '@/components/AboutUsSection'
 
@@ -40,7 +39,6 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <Header />
       <Hero slides={heroSlides} />
       {aboutUsLogo && (
         <AboutUsSection

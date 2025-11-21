@@ -77,5 +77,42 @@ export const Header: GlobalConfig = {
         },
       ],
     },
+    {
+      name: 'topBar',
+      type: 'group',
+      fields: [
+        {
+          name: 'email',
+          type: 'email',
+          label: 'Contact Email',
+        },
+        {
+          name: 'hours',
+          type: 'text',
+          label: 'Club Hours',
+        },
+        {
+          name: 'socialLinks',
+          type: 'array',
+          fields: [
+            {
+              name: 'platform',
+              type: 'select',
+              options: [
+                { label: 'Facebook', value: 'facebook' },
+                { label: 'Instagram', value: 'instagram' },
+                { label: 'Twitter', value: 'twitter' },
+                { label: 'LinkedIn', value: 'linkedin' },
+              ],
+            },
+            {
+              name: 'url',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
   ],
 }

@@ -1,5 +1,126 @@
 @import "tailwindcss";
 
 :root {
+  /* Base NSUDC Colors */
+  --primary: #071530; /* NSUDC deep blue */
+  --primary-light: #1e3a8a;
+  --primary-hover: #1e40af;
+  --ink: #0a0a0a; /* near black text */
+  --ink-40: rgba(10, 10, 10, 0.4);
+  --ink-light: #64748b;
+
+  /* Enhanced gradients */
+  --gradient-primary: linear-gradient(135deg, #071530 0%, #1e3a8a 50%, #3b82f6 100%);
+  --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%);
+  --gradient-hero: linear-gradient(135deg, rgba(7, 21, 48, 0.95) 0%, rgba(30, 58, 138, 0.85) 100%);
+  
+  /* Semantic colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+  --accent: #f59e0b;
+
+  /* Surface & UI */
+  --chip-bg: #e8eef8; /* soft blue pill */
+  --chip-ink: #0b1b3a;
+  --card-stroke: #0715301a; /* subtle border */
+  --surface: #ffffff;
+  --surface-hover: #f8fafc;
+  --surface-alt: #f1f5f9;
+  
+  /* Glass effects */
+  --glass: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --backdrop-blur: blur(10px);
+
+  /* Enhanced shadows */
+  --shadow: 0 2px 8px rgba(7, 21, 48, 0.06), 0 1px 2px rgba(7, 21, 48, 0.04);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 12px rgba(7, 21, 48, 0.08), 0 2px 4px rgba(7, 21, 48, 0.04);
+  --shadow-lg: 0 12px 28px rgba(7, 21, 48, 0.12), 0 4px 8px rgba(7, 21, 48, 0.06);
+  --shadow-xl: 0 20px 40px rgba(7, 21, 48, 0.16), 0 8px 12px rgba(7, 21, 48, 0.08);
+  --shadow-glow: 0 0 0 1px rgb(59 130 246 / 0.1), 0 0 20px rgb(59 130 246 / 0.1);
+  
+  /* Animations */
+  --transition-fast: 0.15s ease-out;
+  --transition-normal: 0.3s ease-out;
+  --transition-slow: 0.5s ease-out;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
   --radius: 0.5rem;
+}
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    color: var(--ink);
+    background: var(--surface);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--primary);
+    border: 2px solid var(--primary);
+  }
+  
+  .nav-link {
+    color: rgba(10, 10, 10, 0.6);
+    font-weight: 600;
+    transition: color var(--transition-fast);
+  }
+  
+  .nav-link:hover {
+    color: var(--ink);
+  }
+}
+
+@layer utilities {
+  /* Animation keyframes */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out;
+  }
+
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
 }
