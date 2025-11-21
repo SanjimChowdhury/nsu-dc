@@ -1,6 +1,8 @@
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import Link from 'next/link'
+import Image from 'next/image'
+import type { NavItem, Page, ConnectLink } from '@/types/navigation'
 
 export default async function Footer() {
   const payloadConfig = await config
@@ -22,11 +24,10 @@ export default async function Footer() {
     'https://placehold.co/120x50/FFFFFF/000000?text=LOGO&font=inter'
 
   // Use navItems from header, filter to only show top-level links
-  const navItems = headerData.navItems || []
-  const quickLinks = navItems.filter((item: any) => item.type === 'link' && item.link)
-  
+  const navItems = (headerData.navItems || []) as NavItem[]
+  const quickLinks = navItems.filter((item: NavItem) => item.type === 'link' && item.link)
   // Hardcoded connect links (will be integrated with Payload later)
-  const connectLinks = [
+  const connectLinks: ConnectLink[] = [
     {
       label: 'debate.club@northsouth.edu',
       url: 'mailto:debate.club@northsouth.edu',
@@ -34,7 +35,7 @@ export default async function Footer() {
     },
     {
       label: 'Facebook',
-      url: 'https://facebook.com/nsudc',
+      url: 'https://facebook.com/nsudc93',
       newTab: true,
     },
     {
@@ -53,14 +54,14 @@ export default async function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <img src={logoUrl} alt="NSUDC" className="h-10 w-auto" />
-              <div>
-                <h3 className="font-extrabold text-lg">NSU Debate Club</h3>
-                <p className="text-sm text-white/80">Building Leaders Since 1993</p>
-              </div>
+            <Link href="/" className="block">
+              <Image src={logoUrl} alt="NSUDC" width={120} height={40} className="h-10 w-auto" />
+            </Link>
+            <div className="mt-4">
+              <h3 className="font-extrabold text-lg">NSU Debate Club</h3>
+              <p className="text-sm text-white/80">Building Leaders Since 1993</p>
             </div>
-            <p className="text-white/70 text-sm leading-relaxed max-w-md">
+            <p className="text-white/70 text-sm leading-relaxed max-w-md mt-4">
               {description}
             </p>
           </div>
@@ -69,8 +70,8 @@ export default async function Footer() {
           <div>
             <h4 className="font-bold mb-3 text-sm uppercase tracking-wide">Quick Links</h4>
             <ul className="space-y-2 text-sm">
-              {quickLinks.map((item: any, index: number) => {
-                const page = item.link as any
+              {quickLinks.map((item: NavItem, index: number) => {
+                const page = item.link as Page
                 // Skip if page or slug is not available
                 if (!page || !page.slug) return null
                 return (
@@ -91,7 +92,7 @@ export default async function Footer() {
           <div>
             <h4 className="font-bold mb-3 text-sm uppercase tracking-wide">Connect</h4>
             <ul className="space-y-2 text-sm">
-              {connectLinks.map((item: any, index: number) => (
+              {connectLinks.map((item: ConnectLink, index: number) => (
                 <li key={index}>
                   <a 
                     href={item.url} 

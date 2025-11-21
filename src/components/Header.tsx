@@ -1,22 +1,10 @@
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import Link from 'next/link'
-import { Menu, ChevronDown, Mail, Clock, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react'
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
+import Image from 'next/image'
+import { ChevronDown, Mail, Clock, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react'
+import MobileMenu from '@/components/MobileMenu'
+import type { NavItem as NavItemType, SocialLink, TopBar, Page, SubLink } from '@/types/navigation'
 
 const SocialIcon = ({ platform, className }: { platform: string; className?: string }) => {
   switch (platform) {
@@ -46,8 +34,8 @@ export default async function Header() {
     (headerData?.logo as unknown as { url: string })?.url ||
     'https://placehold.co/120x50/FFFFFF/000000?text=LOGO&font=inter'
 
-  const navItems = headerData.navItems || []
-  const topBar = (headerData as any).topBar || {}
+  const navItems = (headerData.navItems || []) as NavItemType[]
+  const topBar = (headerData as unknown as { topBar: TopBar }).topBar || {} as TopBar
 
   return (
     <header className="site-header sticky top-0 z-50 shadow-sm">
@@ -57,7 +45,7 @@ export default async function Header() {
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-2">
               <span className="bg-white/10 p-1 rounded-full flex items-center justify-center">
-                 <img src="/nsu-logo-small.png" alt="NSU" className="w-4 h-4 object-contain" />
+                 <Image src="/nsu-logo-small.png" alt="NSU" width={16} height={16} className="object-contain" />
               </span>
               North South University, Dhaka
             </span>
@@ -75,7 +63,7 @@ export default async function Header() {
             )}
           </div>
           <div className="flex items-center gap-4">
-            {topBar.socialLinks?.map((social: any, index: number) => (
+            {topBar.socialLinks?.map((social: SocialLink, index: number) => (
               <a
                 key={index}
                 href={social.url}
@@ -99,7 +87,7 @@ export default async function Header() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <img src={logoUrl} alt="NSU DC" className="h-12 w-auto transition-transform group-hover:scale-105" />
+            <Image src={logoUrl} alt="NSU DC" width={120} height={48} className="h-12 w-auto transition-transform group-hover:scale-105" />
             <div className="flex flex-col">
               <span className="site-title font-extrabold text-lg leading-tight text-[var(--primary)]">NSU Debate Club</span>
               <span className="text-xs text-[var(--ink-light)] font-medium">Official NSU Student Organization</span>
@@ -108,7 +96,7 @@ export default async function Header() {
 
           {/* Desktop Nav Items */}
           <div className="hidden lg:flex items-center gap-8">
-            {navItems.map((item: any, index: number) => (
+            {navItems.map((item: NavItemType, index: number) => (
               <NavItem key={index} item={item} />
             ))}
           </div>
@@ -125,37 +113,7 @@ export default async function Header() {
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Menu">
-                  <Menu className="h-6 w-6 text-[var(--primary)]" />
-                </button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <SheetHeader>
-                  <SheetTitle>
-                    <img src={logoUrl} alt="Logo" className="h-10 w-auto" />
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="mt-8 flex flex-col gap-4">
-                  <nav>
-                    <Accordion type="single" collapsible className="w-full">
-                      {navItems.map((item: any, index: number) => (
-                        <MobileNavItem key={index} item={item} index={index} />
-                      ))}
-                    </Accordion>
-                  </nav>
-                  <div className="flex flex-col gap-3 mt-4 border-t pt-4">
-                    <Link href="/register" className="btn-secondary px-4 py-2 text-center rounded-lg">
-                      Student Portal
-                    </Link>
-                    <Link href="/register" className="btn-primary px-4 py-2 text-center rounded-lg">
-                      Join NSUDC
-                    </Link>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+            <MobileMenu logoUrl={logoUrl} navItems={navItems} />
           </div>
         </div>
       </nav>
@@ -163,10 +121,10 @@ export default async function Header() {
   )
 }
 
-function NavItem({ item }: { item: any }) {
+function NavItem({ item }: { item: NavItemType }) {
   if (item.type === 'link') {
     if (item.link) {
-      const page = item.link as any
+      const page = item.link as Page
       return (
         <Link
           href={`/${page.slug}`}
@@ -193,8 +151,8 @@ function NavItem({ item }: { item: any }) {
         </button>
         <div className="absolute left-0 top-full hidden group-hover:block bg-white border border-[var(--card-stroke)] rounded-lg shadow-lg min-w-[220px] z-50 p-2 mt-1">
           <ul className="space-y-1">
-            {item.subLinks.map((subLink: any, index: number) => {
-              const subPage = subLink.link as any
+            {item.subLinks.map((subLink: SubLink, index: number) => {
+              const subPage = subLink.link as Page
               return (
                 <li key={index}>
                   <Link
@@ -215,57 +173,4 @@ function NavItem({ item }: { item: any }) {
   return null
 }
 
-function MobileNavItem({ item, index }: { item: any; index: number }) {
-  if (item.type === 'link') {
-    if (item.link) {
-      const page = item.link as any
-      return (
-        <div className="border-b border-gray-100">
-          <Link
-            href={`/${page.slug}`}
-            className="block py-3 text-base font-medium text-[var(--ink)] hover:text-[var(--primary)]"
-          >
-            {item.label}
-          </Link>
-        </div>
-      )
-    } else {
-      return (
-        <div className="border-b border-gray-100">
-          <span className="block py-3 text-base font-medium text-[var(--ink)] cursor-default">
-            {item.label}
-          </span>
-        </div>
-      )
-    }
-  }
 
-  if (item.type === 'dropdown' && item.subLinks && item.subLinks.length > 0) {
-    return (
-      <AccordionItem value={`item-${index}`} className="border-b border-gray-100">
-        <AccordionTrigger className="text-base font-medium text-[var(--ink)] hover:text-[var(--primary)] py-3">
-          {item.label}
-        </AccordionTrigger>
-        <AccordionContent>
-          <ul className="space-y-2 pl-4 pb-2">
-            {item.subLinks.map((subLink: any, subIndex: number) => {
-              const subPage = subLink.link as any
-              return (
-                <li key={subIndex}>
-                  <Link
-                    href={`/${subPage.slug}`}
-                    className="block py-2 text-sm text-[var(--ink-light)] hover:text-[var(--primary)]"
-                  >
-                    {subLink.label}
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-        </AccordionContent>
-      </AccordionItem>
-    )
-  }
-
-  return null
-}
