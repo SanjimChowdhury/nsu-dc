@@ -44,14 +44,12 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen">
       <Hero slides={heroSlides} />
-      {aboutUsLogo && (
-        <AboutUsSection
-          logo={aboutUsLogo}
-          label={aboutUsData?.label || 'About Us'}
-          heading={aboutUsData?.heading || ''}
-          description={aboutUsData?.description || ''}
-        />
-      )}
+      <AboutUsSection
+        logo={aboutUsLogo}
+        label={aboutUsData?.label}
+        heading={aboutUsData?.heading}
+        description={aboutUsData?.description}
+      />
     </div>
   )
 }

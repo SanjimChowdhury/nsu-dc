@@ -4,8 +4,8 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
 export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+  description: 'The voice on NSU at home and abroad',
+  title: 'NSU DC',
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
