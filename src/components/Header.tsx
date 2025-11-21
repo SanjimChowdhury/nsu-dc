@@ -32,7 +32,7 @@ export default async function Header() {
 
   const logoUrl =
     (headerData?.logo as unknown as { url: string })?.url ||
-    'https://placehold.co/120x50/FFFFFF/000000?text=LOGO&font=inter'
+    '/nsudc-logo-1.png'
 
   const navItems = (headerData.navItems || []) as NavItemType[]
   const topBar = (headerData as unknown as { topBar: TopBar }).topBar || {} as TopBar

@@ -21,7 +21,7 @@ export default async function Footer() {
 
   const logoUrl =
     (footerData?.logo as unknown as { url: string })?.url ||
-    'https://placehold.co/120x50/FFFFFF/000000?text=LOGO&font=inter'
+    '/nsudc-logo-1.png'
 
   // Use navItems from header, filter to only show top-level links
   const navItems = (headerData.navItems || []) as NavItem[]

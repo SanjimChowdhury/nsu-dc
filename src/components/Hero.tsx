@@ -39,6 +39,9 @@ export default function Hero({ slides }: HeroProps) {
   // Initialize autoplay plugin for carousel
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }))
 
+  // Fallback images that cycle based on slide index
+  const fallbackImages = ['/IMG_7288.jpg', '/IMG_7188.jpg', '/IMG_7185.jpg']
+
   return (
     <section className="w-full">
       <Carousel
@@ -52,17 +55,21 @@ export default function Hero({ slides }: HeroProps) {
         }}
       >
         <CarouselContent>
-          {slides.map((slide, index) => (
-            <CarouselItem key={index}>
-              <div className="relative h-[70vh] w-full overflow-hidden">
-                {/* Background Image */}
-                <Image
-                  src={slide.image.url || 'https://placehold.co/1920x1080/1a1a1a/ffffff?text=Hero+Image'}
-                  alt={slide.image.alt || slide.title || `Hero slide ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  priority={index === 0} // Prioritize loading first image
-                />
+          {slides.map((slide, index) => {
+            // Get fallback image by cycling through the array
+            const fallbackImage = fallbackImages[index % fallbackImages.length]
+            
+            return (
+              <CarouselItem key={index}>
+                <div className="relative h-[70vh] w-full overflow-hidden">
+                  {/* Background Image */}
+                  <Image
+                    src={slide.image.url || fallbackImage}
+                    alt={slide.image.alt || slide.title || `Hero slide ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    priority={index === 0} // Prioritize loading first image
+                  />
 
                 {/* Dark Overlay for Text Readability */}
                 <div className="absolute inset-0 bg-black/50" />
@@ -92,7 +99,8 @@ export default function Hero({ slides }: HeroProps) {
                 </div>
               </div>
             </CarouselItem>
-          ))}
+            )
+          })}
         </CarouselContent>
       </Carousel>
     </section>
