@@ -24,6 +24,10 @@ After you click the `Deploy` button above, you'll want to have standalone copy o
 
 That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
 
+### AI Motion Generator
+
+- Add `OPENAI_API_KEY` to your `.env` to enable the Bangla/English motion generator at `/api/motions` (used on the home page). Without the key, a local fallback set of motions is returned.
+
 #### Docker (Optional)
 
 If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
