@@ -12,8 +12,7 @@ const DEFAULT_FALLBACK = {
   ],
   language: 'english' as Language,
   format: 'Any' as Format,
-  notes:
-    'Fallback sample because OPENAI_API_KEY is missing. Add one to get live AI-generated motions.',
+  notes: 'Fallback sample because GEMINI_API_KEY is missing. Add one to get live AI-generated motions.',
 }
 
 export async function POST(req: NextRequest) {
@@ -24,13 +23,14 @@ export async function POST(req: NextRequest) {
     const lng = (language as Language) || 'english'
     const fmt = (format as Format) || 'Any'
     const aiTone = (tone as Tone) || 'general'
-    const apiKey = process.env.OPENAI_API_KEY
-
+    
+    const apiKey = process.env.GEMINI_API_KEY
+    
     if (!apiKey) {
       return Response.json(DEFAULT_FALLBACK, { status: 200 })
     }
 
-    const systemPrompt = [
+    const prompt = [
       'You are an expert debate motion writer for university circuits.',
       'Return 3 concise motions only, keep them realistic and clashable.',
       'Respect the requested language and format.',
@@ -39,40 +39,45 @@ export async function POST(req: NextRequest) {
       '- novice-friendly: clear wording, accessible topics.',
       '- spicy: sharper stance and controversy.',
       'If language is Bangla, write the motions fully in Bangla script.',
-    ].join(' ')
-
-    const userPrompt = [
+      '',
       `Language: ${lng}`,
       `Format: ${fmt}`,
       `Tone: ${aiTone}`,
       `Context: ${topic || 'No specific context; make it varied.'}`,
-      'Return JSON with keys: motions (string array), notes (string).',
+      '',
+      'Return ONLY valid JSON with keys: motions (string array of 3 motions), notes (string with brief explanation).',
+      'Do not include markdown code blocks or any other text outside the JSON.',
     ].join('\n')
 
-    const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+    // Gemini API configuration
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
+
+    const geminiRes = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt },
+        contents: [
+          {
+            parts: [{ text: prompt }],
+          },
         ],
-        temperature: aiTone === 'spicy' ? 1 : aiTone === 'novice-friendly' ? 0.7 : 0.85,
-        max_tokens: 500,
+        generationConfig: {
+          temperature: aiTone === 'spicy' ? 1 : aiTone === 'novice-friendly' ? 0.7 : 0.85,
+          maxOutputTokens: 500,
+        },
       }),
     })
 
-    if (!openaiRes.ok) {
-      const text = await openaiRes.text()
+    if (!geminiRes.ok) {
+      const text = await geminiRes.text()
+      console.error('Gemini API error:', text)
       return new Response(text || 'Upstream AI error', { status: 502 })
     }
 
-    const json = await openaiRes.json()
-    const content = json?.choices?.[0]?.message?.content
+    const json = await geminiRes.json()
+    const content = json?.candidates?.[0]?.content?.parts?.[0]?.text
 
     if (!content) {
       return Response.json(DEFAULT_FALLBACK, { status: 200 })
@@ -81,7 +86,12 @@ export async function POST(req: NextRequest) {
     // Try to parse JSON payload from the model; fall back to lines.
     let parsed
     try {
-      parsed = JSON.parse(content)
+      // Handle potential markdown code blocks in response
+      const cleanContent = content
+        .replace(/```json\n?/g, '')
+        .replace(/```\n?/g, '')
+        .trim()
+      parsed = JSON.parse(cleanContent)
     } catch {
       const motions = String(content)
         .split('\n')
@@ -89,7 +99,7 @@ export async function POST(req: NextRequest) {
         .filter(Boolean)
         .slice(0, 3)
 
-      parsed = { motions, notes: 'Generated from AI response' }
+      parsed = { motions, notes: 'Generated from Gemini response' }
     }
 
     return Response.json(

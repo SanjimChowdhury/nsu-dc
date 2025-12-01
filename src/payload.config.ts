@@ -18,6 +18,10 @@ import { Footer } from './globals/Footer'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// Only enable Vercel Blob storage if a valid token is provided
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN
+const hasValidBlobToken = blobToken && blobToken.startsWith('vercel_blob_rw_') && blobToken.length > 30
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -36,16 +40,17 @@ export default buildConfig({
     url: process.env.DATABASE_URI || '',
   }),
   sharp,
-  plugins: [
-    vercelBlobStorage({
-      enabled: true,
-      collections: {
-        media: {
-          disableLocalStorage: true,
-        },
-      },
-      token: process.env.BLOB_READ_WRITE_TOKEN!,
-    }),
-  ],
+  plugins: hasValidBlobToken
+    ? [
+        vercelBlobStorage({
+          enabled: true,
+          collections: {
+            media: {
+              disableLocalStorage: true,
+            },
+          },
+          token: blobToken,
+        }),
+      ]
+    : [],
 })
-
